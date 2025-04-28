@@ -1,0 +1,32 @@
+.wrapper {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 17% 79%;
+
+    gap: 1%;
+    min-height: 100vh;
+}
+
+@media only screen and (max-width: 600px) {
+    .wrapper {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+@media only screen and (min-width: 600px) and (max-width: 1024px) {
+    .wrapper {
+        grid-template-columns: 35% 64%;
+    }
+}
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    // bỏ phần slidebar width cũ nếu có
+  }
+  
+  .home-page {
+    flex: 1;
+    overflow-y: auto;
+  }

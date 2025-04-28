@@ -1,0 +1,52 @@
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    background-color: #fff;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .title {
+    margin: 0;
+    font-size: 1.25rem;
+  }
+  
+  .menu {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .item {
+    display: flex;
+    align-items: center;
+    margin-left: 1.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    color: #333;
+    transition: background-color 0.2s;
+  
+    &:hover {
+      background-color: #f5f5f5;
+    }
+  
+    &.active {
+      background-color: #0062ff;
+      color: #fff;
+    }
+  
+    &.logout {
+      margin-left: 2rem;
+      color: #e53935;
+      &:hover {
+        background-color: #fdecea;
+      }
+    }
+  
+    svg {
+      margin-right: 0.5rem;
+    }
+  }

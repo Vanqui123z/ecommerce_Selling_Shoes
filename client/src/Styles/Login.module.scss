@@ -1,0 +1,134 @@
+.body-wrapper {
+    background-image: url(https://www.sneakerfiles.com/wp-content/uploads/2024/10/nike-air-force-1-sk8-skate-shoe-colorways-release-dates.jpg);
+    background-size: cover;
+    filter: none;
+    opacity: 1;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    width: 100%;
+}
+
+.wrapper {
+    width: 500px;
+    min-height: 600px;
+    padding: 2rem 2rem 3rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    /* thay background-color cũ bằng nền trong suốt */
+    background-color: rgba(255, 255, 255, 0.3);
+    
+    /* làm mờ (blur) phần background bên dưới */
+    backdrop-filter: blur(12px);
+    /* vendor prefix cho Safari */
+    -webkit-backdrop-filter: blur(12px);
+    
+    border-radius: 35px;
+    box-shadow: 0px 10px 30px rgba(156, 180, 229, 0.2);
+    transition: width 0.3s ease, height 0.3s ease;
+    
+    font-size: 1.1rem;
+    line-height: 1.5;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .inner {
+    width: 100%;   /* <-- chỉnh từ 85% thành 100% */
+    padding: 0 1rem; /* <-- thêm padding nhẹ 2 bên */
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;       /* văn bản trong header/form cũng căn giữa */
+  }
+  
+  .header-form-login {
+    text-align: center;
+    font-size: 1.5rem;  /* vẫn giữ */
+    /* … */
+  }
+  
+  .form-input {
+    width: 100%; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+
+
+  
+    label {
+        width: 150%;
+        text-align:left;
+        padding-top: 3px;  /* nếu muốn label vẫn căn trái trong input, hoặc center nếu muốn label cũng ở giữa */
+    }
+    input {
+        width: 150%;  /* <-- input full chiều ngang */
+        height: 45px;
+        padding-left: 10px;
+        border: 1px solid #c9c9c9;
+        border-radius: 8px;
+        font-size: 1.1rem;
+    }
+  }
+  
+  .single-input-fields {
+    width: 100%;
+    display: flex;
+    flex-direction: column; /* chuyển từ row sang column để cả checkbox + link đều nằm giữa */
+    align-items: center;    /* căn ngang giữa */
+    gap: 0.5rem;
+    padding-top: 20px;
+  
+    label {
+      font-weight: 700;
+    }
+    a {
+      color: #ff2020;
+    }
+  }
+  
+  .btn-login {
+    width: 100%;
+    margin-top: 20px;
+    height: 40px;
+    background: #ff2020;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0.75rem;
+  }
+  
+  /* Phần footer (đăng ký, login với FB/Google) */
+  .login-footer {
+    width: 100%;
+    display: flex;
+    flex-direction: column; /* xếp dọc */
+    align-items: center;    /* căn ngang giữa */
+    gap: 1rem;
+    margin: 20px 0 40px;
+  }
+  
+  .btn-login-facebook,
+  .btn-login-google {
+    width: 100%;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #0866ff;
+    button {
+      border: none;
+      background: none;
+      color: #fff;
+      font-weight: 800;
+    }
+  }

@@ -7,7 +7,7 @@ function Slider() {
     return (
         <div className={cx('wrapper')}>
             <div id={cx('slider')}>
-                <img src="https://cdn.shortpixel.ai/spai/q_lossy+w_1901+to_avif+ret_img/anchuongshoes.vn/storage/2025/02/banner-sneaker-champion.jpg" alt="" />
+                <img src="https://authentic-shoes.com/wp-content/uploads/2023/07/64a86d260c3e07ee19a9efdf_Untitled_1070_760_px_35.png" alt="" />
             </div>
             <div className={cx('container')}>
                 <div className={cx('box')}>

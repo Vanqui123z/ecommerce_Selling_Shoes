@@ -24,6 +24,10 @@ const io = new Server(server, {
     },
 });
 
+// Serve static files from React
+app.use(express.static(path.join(__dirname, '../../client/build')));
+
+
 app.use(cookieParser());
 app.use(cors({ origin: process.env.REACT_APP_URL, credentials: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -37,6 +41,9 @@ app.post('/chat', async (req, res) => {
     const { question } = req.body;
     const data = await askQuestion(question);
     return res.status(200).json(data);
+});
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../client/build', 'index.html'));
 });
 
 server.listen(port, () => {

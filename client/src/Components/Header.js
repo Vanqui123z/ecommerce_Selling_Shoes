@@ -6,11 +6,11 @@ import useDebounce from '../hooks/useDebounce';
 import logo from '../assests/imgs/logo.png';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-    faBars, 
-    faCartPlus, 
-    faSearch, 
-    faUserCircle, 
+import {
+    faBars,
+    faCartPlus,
+    faSearch,
+    faUserCircle,
     faSignOutAlt,
     faHome,
     faTshirt,
@@ -49,7 +49,7 @@ function Header() {
             }
 
             request.get('/api/search', { params: { nameProduct: debounce } }).then((res) => setDataSearch(res.data));
-        } catch (error) {}
+        } catch (error) { }
     }, [debounce, searchValue]);
 
     // Xử lý đóng dropdown khi click bên ngoài
@@ -99,21 +99,21 @@ function Header() {
             <div className={cx('top-bar')}>
                 <div className={cx('container')}>
 
-                <div className={cx('main-header')}>
-                <div className={cx('container')}>
-                    <div className={cx('menu-toggle')}>
-                        <button onClick={handleShowMenu}>
-                            <FontAwesomeIcon icon={faBars} />
-                        </button>
+                    <div className={cx('main-header')}>
+                        <div className={cx('container')}>
+                            <div className={cx('menu-toggle')}>
+                                <button onClick={handleShowMenu}>
+                                    <FontAwesomeIcon icon={faBars} />
+                                </button>
+                            </div>
+
+                            <Link to={'/'} className={cx('logo-container')}>
+                                <img id={cx('logo')} src={logo} alt="Logo" />
+                            </Link>
+
+
+                        </div>
                     </div>
-                    
-                    <Link to={'/'} className={cx('logo-container')}>
-                        <img id={cx('logo')} src={logo} alt="Logo" />
-                    </Link>
-                    
-                  
-                </div>
-            </div>
                     {dataUser?._id ? (
                         <div className={cx('welcome-text')}>
                             Xin chào, {dataUser.name || 'Khách hàng'}!
@@ -123,69 +123,69 @@ function Header() {
                             Chào mừng đến với cửa hàng giày
                         </div>
                     )}
-                        
+
                     <div className={cx('top-actions')}>
-                    <div className={cx('header-actions')}>
-                        <div className={cx('search-container')} ref={searchRef}>
-                            <button 
-                                className={cx('search-toggle', { 'expanded': searchExpanded })} 
-                                onClick={toggleSearch}
-                            >
-                                <FontAwesomeIcon icon={faSearch} />
-                            </button>
-                            
-                            {searchExpanded && (
-                                <div className={cx('search-expanded')}>
-                                    <input 
-                                        className={cx('search-input')}
-                                        placeholder="Tìm Kiếm Sản Phẩm..." 
-                                        onChange={(e) => setSearchValue(e.target.value)} 
-                                        value={searchValue}
-                                    />
-                                    
-                                    {searchValue.length > 0 && (
-                                        <div className={cx('result')}>
-                                            {dataSearch.map((item) => (
-                                                <Link to={`/product/${item._id}/${item.slug}`} key={item._id} onClick={() => setSearchExpanded(false)}>
-                                                    <div className={cx('form-result')}>
-                                                        {dataSearch.length === 1 && item.name === 'Không Tìm Thấy Sản Phẩm !!!' ? (
-                                                            <img src={`${item?.img}`} alt="" />
-                                                        ) : (
-                                                            <img src={`${process.env.REACT_APP_IMG}/${item?.img[0]}`} alt="" />
-                                                        )}
-                                                        <div className={cx('product-info')}>
-                                                            <span className={cx('product-name')}>{item.name}</span>
+                        <div className={cx('header-actions')}>
+                            <div className={cx('search-container')} ref={searchRef}>
+                                <button
+                                    className={cx('search-toggle', { 'expanded': searchExpanded })}
+                                    onClick={toggleSearch}
+                                >
+                                    <FontAwesomeIcon icon={faSearch} />
+                                </button>
+
+                                {searchExpanded && (
+                                    <div className={cx('search-expanded')}>
+                                        <input
+                                            className={cx('search-input')}
+                                            placeholder="Tìm Kiếm Sản Phẩm..."
+                                            onChange={(e) => setSearchValue(e.target.value)}
+                                            value={searchValue}
+                                        />
+
+                                        {searchValue.length > 0 && (
+                                            <div className={cx('result')}>
+                                                {dataSearch.map((item) => (
+                                                    <Link to={`/product/${item._id}/${item.slug}`} key={item._id} onClick={() => setSearchExpanded(false)}>
+                                                        <div className={cx('form-result')}>
                                                             {dataSearch.length === 1 && item.name === 'Không Tìm Thấy Sản Phẩm !!!' ? (
-                                                                <></>
+                                                                <img src={`${item?.img}`} alt="" />
                                                             ) : (
-                                                                <span className={cx('product-price')}>{item.price.toLocaleString()} đ</span>
+                                                                <img src={`${process.env.REACT_APP_IMG}/${item?.img[0]}`} alt="" />
                                                             )}
+                                                            <div className={cx('product-info')}>
+                                                                <span className={cx('product-name')}>{item.name}</span>
+                                                                {dataSearch.length === 1 && item.name === 'Không Tìm Thấy Sản Phẩm !!!' ? (
+                                                                    <></>
+                                                                ) : (
+                                                                    <span className={cx('product-price')}>{item.price.toLocaleString()} đ</span>
+                                                                )}
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </Link>
-                                            ))}
-                                        </div>
+                                                    </Link>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+
+                            {dataUser?._id && (
+                                <Link to={'/cart'} className={cx('cart-icon')}>
+                                    <FontAwesomeIcon icon={faCartPlus} />
+                                    {dataCart[0]?.products.length > 0 && (
+                                        <span className={cx('cart-badge')}>{dataCart[0]?.products.length}</span>
                                     )}
-                                </div>
+                                </Link>
                             )}
                         </div>
-                        
-                        {dataUser?._id && (
-                            <Link to={'/cart'} className={cx('cart-icon')}>
-                                <FontAwesomeIcon icon={faCartPlus} />
-                                {dataCart[0]?.products.length > 0 && (
-                                    <span className={cx('cart-badge')}>{dataCart[0]?.products.length}</span>
-                                )}
-                            </Link>
-                        )}
-                    </div>  
                         {dataUser?._id ? (
                             <div className={cx('user-dropdown')} ref={userDropdownRef}>
                                 <button className={cx('user-btn')} onClick={toggleUserDropdown}>
                                     <FontAwesomeIcon icon={faUserCircle} />
                                     <span>Tài khoản</span>
                                 </button>
-                                
+
                                 {showUserDropdown && (
                                     <div className={cx('dropdown-menu')}>
                                         <Link to={'/info'} className={cx('dropdown-item')}>
@@ -211,9 +211,7 @@ function Header() {
                     </div>
                 </div>
             </div>
-            
-          
-            
+
             <div className={cx('navigation')}>
                 <div className={cx('container')}>
                     <div className={cx('nav-items')}>
@@ -238,73 +236,81 @@ function Header() {
                     </div>
                 </div>
             </div>
+            <div className={cx('btn-menu-mobile')}>
+                <button onClick={handleShowMenu}>
+                    <FontAwesomeIcon icon={faBars} />
+                </button>
+            </div>
+            <div className={cx('menu-mobile')}>
+                <>
+                    <Offcanvas show={show} onHide={handleClose} className={cx('mobile-menu')}>
+                        <Offcanvas.Header closeButton>
+                            <Link to={'/'}>
+                                <img src={logo} alt="Logo" className={cx('mobile-logo')} />
+                            </Link>
+                        </Offcanvas.Header>
+                        <Offcanvas.Body>
+                            <div className={cx('mobile-search')}>
+                                <input
+                                    placeholder="Tìm Kiếm..."
+                                    onChange={(e) => setSearchValue(e.target.value)}
+                                    value={searchValue}
+                                />
+                                <button><FontAwesomeIcon icon={faSearch} /></button>
+                            </div>
 
-            <Offcanvas show={show} onHide={handleClose} className={cx('mobile-menu')}>
-                <Offcanvas.Header closeButton>
-                    <Link to={'/'}>
-                        <img src={logo} alt="Logo" className={cx('mobile-logo')} />
-                    </Link>
-                </Offcanvas.Header>
-                <Offcanvas.Body>
-                    <div className={cx('mobile-search')}>
-                        <input 
-                            placeholder="Tìm Kiếm..." 
-                            onChange={(e) => setSearchValue(e.target.value)} 
-                            value={searchValue}
-                        />
-                        <button><FontAwesomeIcon icon={faSearch} /></button>
-                    </div>
-                    
-                    <div className={cx('mobile-nav')}>
-                        <Link to={'/'} className={cx('mobile-nav-item')} onClick={handleClose}>
-                            <FontAwesomeIcon icon={faHome} />
-                            <span>Trang Chủ</span>
-                        </Link>
-                        <Link to={'/category'} className={cx('mobile-nav-item')} onClick={handleClose}>
-                            <FontAwesomeIcon icon={faTshirt} />
-                            <span>Tất Cả Sản Phẩm</span>
-                        </Link>
-                        <Link to={'/category/giay-nam'} className={cx('mobile-nav-item')} onClick={handleClose}>
-                            <span>Giày Nam</span>
-                        </Link>
-                        <Link to={'/category/giay-nu'} className={cx('mobile-nav-item')} onClick={handleClose}>
-                            <span>Giày Nữ</span>
-                        </Link>
-                        <Link to={'/category/giay-tre-em'} className={cx('mobile-nav-item')} onClick={handleClose}>
-                            <FontAwesomeIcon icon={faChild} />
-                            <span>Giày Trẻ Em</span>
-                        </Link>
-                        
-                        {dataUser?._id && (
-                            <Link to={'/cart'} className={cx('mobile-nav-item')} onClick={handleClose}>
-                                <FontAwesomeIcon icon={faCartPlus} />
-                                <span>Giỏ Hàng</span>
-                            </Link>
-                        )}
-                        
-                        <Link to={dataUser?._id ? '/info' : '/login'} className={cx('mobile-nav-item')} onClick={handleClose}>
-                            <FontAwesomeIcon icon={faUserCircle} />
-                            <span>Thông Tin Người Dùng</span>
-                        </Link>
-                        
-                        {dataUser?.isAdmin && (
-                            <Link to={'/admin'} className={cx('mobile-nav-item', 'admin-link')} onClick={handleClose}>
-                                <span>Trang Quản Trị</span>
-                            </Link>
-                        )}
-                        
-                        {dataUser?._id && (
-                            <button className={cx('mobile-nav-item', 'logout-btn')} onClick={() => {
-                                handleLogOut();
-                                handleClose();
-                            }}>
-                                <FontAwesomeIcon icon={faSignOutAlt} />
-                                <span>Đăng Xuất</span>
-                            </button>
-                        )}
-                    </div>
-                </Offcanvas.Body>
-            </Offcanvas>
+                            <div className={cx('mobile-nav')}>
+                                <Link to={'/'} className={cx('mobile-nav-item')} onClick={handleClose}>
+                                    <FontAwesomeIcon icon={faHome} />
+                                    <span>Trang Chủ</span>
+                                </Link>
+                                <Link to={'/category'} className={cx('mobile-nav-item')} onClick={handleClose}>
+                                    <FontAwesomeIcon icon={faTshirt} />
+                                    <span>Tất Cả Sản Phẩm</span>
+                                </Link>
+                                <Link to={'/category/giay-nam'} className={cx('mobile-nav-item')} onClick={handleClose}>
+                                    <span>Giày Nam</span>
+                                </Link>
+                                <Link to={'/category/giay-nu'} className={cx('mobile-nav-item')} onClick={handleClose}>
+                                    <span>Giày Nữ</span>
+                                </Link>
+                                <Link to={'/category/giay-tre-em'} className={cx('mobile-nav-item')} onClick={handleClose}>
+                                    <FontAwesomeIcon icon={faChild} />
+                                    <span>Giày Trẻ Em</span>
+                                </Link>
+
+                                {dataUser?._id && (
+                                    <Link to={'/cart'} className={cx('mobile-nav-item')} onClick={handleClose}>
+                                        <FontAwesomeIcon icon={faCartPlus} />
+                                        <span>Giỏ Hàng</span>
+                                    </Link>
+                                )}
+
+                                <Link to={dataUser?._id ? '/info' : '/login'} className={cx('mobile-nav-item')} onClick={handleClose}>
+                                    <FontAwesomeIcon icon={faUserCircle} />
+                                    <span>Thông Tin Người Dùng</span>
+                                </Link>
+
+                                {dataUser?.isAdmin && (
+                                    <Link to={'/admin'} className={cx('mobile-nav-item', 'admin-link')} onClick={handleClose}>
+                                        <span>Trang Quản Trị</span>
+                                    </Link>
+                                )}
+
+                                {dataUser?._id && (
+                                    <button className={cx('mobile-nav-item', 'logout-btn')} onClick={() => {
+                                        handleLogOut();
+                                        handleClose();
+                                    }}>
+                                        <FontAwesomeIcon icon={faSignOutAlt} />
+                                        <span>Đăng Xuất</span>
+                                    </button>
+                                )}
+                            </div>
+                        </Offcanvas.Body>
+                    </Offcanvas>
+                </>
+            </div>
         </div>
     );
 }

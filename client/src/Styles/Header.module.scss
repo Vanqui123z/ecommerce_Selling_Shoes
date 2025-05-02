@@ -484,6 +484,29 @@
         }
     }
 }
+// Base styles (áp dụng cho mọi kích thước)
+.btn-menu-mobile {
+    display: none; /* Mặc định ẩn */
+    
+    button {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: #333;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.2s ease, color 0.2s ease;
+
+        &:hover {
+            background-color: #f0f0f0;
+            color: #cc1e1e;
+        }
+    }
+}
 
 // Responsive styles
 @media only screen and (max-width: 992px) {
@@ -499,6 +522,11 @@
         .nav-item {
             font-size: 0.85rem;
         }
+    }
+
+    /* Ẩn trên tablet */
+    .btn-menu-mobile {
+        display: none;
     }
 }
 
@@ -532,6 +560,12 @@
     .search-expanded {
         width: 260px;
     }
+
+    /* Hiện nút menu mobile */
+    .btn-menu-mobile {
+        display: flex;
+        align-items: center;
+    }
 }
 
 @media only screen and (max-width: 480px) {
@@ -546,5 +580,9 @@
     .search-expanded {
         width: 220px;
         right: -20px;
+    }
+    
+    .btn-menu-mobile {
+        display: flex;
     }
 }

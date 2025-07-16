@@ -28,7 +28,7 @@ async function askQuestion(question) {
                     } VND</p>
                     ${
                         product._id && product.slug
-                            ? `<a href="${REACT_APP_SERVER}/product/${product._id}/${product.slug}" target="_blank" style="color: #007bff; text-decoration: none; font-size: 13px;">Xem sản phẩm</a>`
+                            ? `<a href="${REACT_APP_SERVER}product/${product._id}/${product.slug}" target="_blank" style="color: #007bff; text-decoration: none; font-size: 13px;">Xem sản phẩm</a>`
                             : ''
                     }
                 </div>
@@ -48,7 +48,7 @@ async function askQuestion(question) {
         - Nếu câu hỏi liên quan đến sản phẩm, hãy tìm và giới thiệu sản phẩm phù hợp
         - Nếu câu hỏi không liên quan đến sản phẩm, hãy trả lời một cách tự nhiên và thân thiện
         - Hãy trả lời một cách tự nhiên và thân thiện, đồng thời hiển thị kết quả dưới dạng HTML để dễ đọc hơn
-        - Link sản phẩm: ${REACT_APP_SERVER}/product/{id}/{slug}
+        - Link sản phẩm: ${REACT_APP_SERVER}product/{id}/{slug}
         - Link hình ảnh: ${REACT_APP_IMG}/{tên_file_ảnh}
         - Sử dụng HTML để format đẹp và dễ đọc
         `;

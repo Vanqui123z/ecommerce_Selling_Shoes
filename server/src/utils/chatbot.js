@@ -41,8 +41,8 @@ async function askQuestion(question) {
         Câu hỏi của khách hàng: "${question}"
         nếu câu hỏi không liên quan đến sản phẩm, hãy trả lời một cách tự nhiên và thân thiện.
         Hãy trả lời một cách tự nhiên và thân thiện, đồng thời hiển thị kết quả dưới dạng HTML để dễ đọc hơn.
-        link sản phẩm thường sẽ là http://localhost:3000/product/ + id + slug của sản phẩm
-        link hình ảnh sẽ là http://localhost:5001/uploads/ + product.img[0]
+        link sản phẩm thường sẽ là http:// + tên miền +/product/ + id + slug của sản phẩm
+        link hình ảnh sẽ là http:// + tên miền +/uploads/ + product.img[0]
         `;
 
         const result = await model.generateContent(prompt);

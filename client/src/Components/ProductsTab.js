@@ -19,13 +19,13 @@ function ProductsTab({ dataProducts }) {
                 <h1>Sản Phẩm Nổi Bật</h1>
                 <div className={cx('list-select')}>
                     <ul style={{ padding: '0' }}>
-                        <li onClick={() => handleActiveList('1')} className={checkList === '1' && cx('active-list')}>
+                        <li onClick={() => handleActiveList('1')} className={checkList === '1' ? cx('active-list') : undefined}>
                             Giày Nam Giới
                         </li>
-                        <li onClick={() => handleActiveList('2')} className={checkList === '2' && cx('active-list')}>
+                        <li onClick={() => handleActiveList('2')} className={checkList === '2' ? cx('active-list')  : undefined}>
                             Giày Nữ Giới
                         </li>
-                        <li onClick={() => handleActiveList('3')} className={checkList === '3' && cx('active-list')}>
+                        <li onClick={() => handleActiveList('3')} className={checkList === '3' ? cx('active-list') : undefined}>
                             Giày Trẻ Em
                         </li>
                     </ul>
@@ -34,7 +34,12 @@ function ProductsTab({ dataProducts }) {
 
             <main className={cx('main')}>
                 {dataProducts
-                    .filter((item) => item.type === Number(checkList))
+                    .filter((item) => {
+                        if (checkList === '1') return item.type === 1; // Giày Nam
+                        if (checkList === '2') return item.type === 3; // Giày Nữ
+                        if (checkList === '3') return item.type === 4; // Giày Trẻ Em
+                        return false;
+                    })
                     .slice(0, 8)
                     .map((item) => (
                         <CardBody key={item._id} item={item} />

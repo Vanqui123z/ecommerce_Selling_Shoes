@@ -21,68 +21,96 @@ function ChartLine() {
     const [weeklyData, setWeeklyData] = useState(0);
     const [monthlyData, setMonthlyData] = useState(0);
     const [productSales, setProductSales] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
+        setLoading(true);
+        setError(null);
         request.get('/api/dataorderuser').then((res) => {
             if (res?.data) {
                 setDataOrder(res.data);
             }
+            setLoading(false);
+        }).catch((error) => {
+            console.error('Error fetching data:', error);
+            setError('Không thể tải dữ liệu');
+            setDataOrder([]);
+            setLoading(false);
         });
     }, []);
 
     useEffect(() => {
-        if (dataOrder.length === 0) return;
+        if (!dataOrder || dataOrder.length === 0) return;
 
-        // Làm phẳng mảng dataOrder
-        const allItems = dataOrder.flat();
+        try {
+            // Làm phẳng mảng dataOrder
+            const allItems = dataOrder.flat();
 
-        // Lọc sản phẩm theo từng loại
-        const filterType = allItems.filter(item => item.type === 1);
-        const filterType2 = allItems.filter(item => item.type === 2);
-        const filterType3 = allItems.filter(item => item.type === 3);
+            // Lọc sản phẩm theo từng loại
+            const filterType = allItems.filter(item => item && item.type === 1);
+            const filterType2 = allItems.filter(item => item && item.type === 2);
+            const filterType3 = allItems.filter(item => item && item.type === 3);
 
-        // Tính tổng giá trị doanh thu cho từng loại sản phẩm
-        const sumPrice1 = filterType.reduce((total, item) => total + item.price * item.quantity, 0);
-        setDataPrice(sumPrice1);
+            // Tính tổng giá trị doanh thu cho từng loại sản phẩm
+            const sumPrice1 = filterType.reduce((total, item) => total + (item.price || 0) * (item.quantity || 0), 0);
+            setDataPrice(sumPrice1);
 
-        const sumPrice2 = filterType2.reduce((total, item) => total + item.price * item.quantity, 0);
-        setDataPrice2(sumPrice2);
+            const sumPrice2 = filterType2.reduce((total, item) => total + (item.price || 0) * (item.quantity || 0), 0);
+            setDataPrice2(sumPrice2);
 
-        const sumPrice3 = filterType3.reduce((total, item) => total + item.price * item.quantity, 0);
-        setDataPrice3(sumPrice3);
+            const sumPrice3 = filterType3.reduce((total, item) => total + (item.price || 0) * (item.quantity || 0), 0);
+            setDataPrice3(sumPrice3);
 
-        // Thống kê ngày / tuần / tháng
-        const now = new Date();
+            // Thống kê ngày / tuần / tháng
+            const now = new Date();
 
-        const daily = allItems.filter(order => new Date(order.purchaseDate).getDate() === now.getDate()
-            && new Date(order.purchaseDate).getMonth() === now.getMonth()
-            && new Date(order.purchaseDate).getFullYear() === now.getFullYear());
-        const weekly = allItems.filter(order => getWeek(new Date(order.purchaseDate)) === getWeek(now)
-            && new Date(order.purchaseDate).getFullYear() === now.getFullYear());
-        const monthly = allItems.filter(order => new Date(order.purchaseDate).getMonth() === now.getMonth()
-            && new Date(order.purchaseDate).getFullYear() === now.getFullYear());
+            const daily = allItems.filter(order => {
+                const orderDate = new Date(order.purchaseDate);
+                return orderDate.getDate() === now.getDate() &&
+                       orderDate.getMonth() === now.getMonth() &&
+                       orderDate.getFullYear() === now.getFullYear();
+            });
+            
+            const weekly = allItems.filter(order => {
+                const orderDate = new Date(order.purchaseDate);
+                return getWeek(orderDate) === getWeek(now) &&
+                       orderDate.getFullYear() === now.getFullYear();
+            });
+            
+            const monthly = allItems.filter(order => {
+                const orderDate = new Date(order.purchaseDate);
+                return orderDate.getMonth() === now.getMonth() &&
+                       orderDate.getFullYear() === now.getFullYear();
+            });
 
-        setDailyData(daily.length);
-        setWeeklyData(weekly.length);
-        setMonthlyData(monthly.length);
+            setDailyData(daily.length);
+            setWeeklyData(weekly.length);
+            setMonthlyData(monthly.length);
 
-        // Tính tổng số lượng bán ra của từng sản phẩm
-        const productMap = {}; // Dùng đối tượng để lưu trữ sản phẩm và số lượng
-        allItems.forEach((item) => {
-            if (productMap[item.nameProduct]) {
-                productMap[item.nameProduct] += item.quantity; // Cộng thêm số lượng nếu sản phẩm đã có
-            } else {
-                productMap[item.nameProduct] = item.quantity; // Nếu chưa có, khởi tạo số lượng
-            }
-        });
+            // Tính tổng số lượng bán ra của từng sản phẩm
+            const productMap = {}; // Dùng đối tượng để lưu trữ sản phẩm và số lượng
+            allItems.forEach((item) => {
+                if (item && item.nameProduct) {
+                    if (productMap[item.nameProduct]) {
+                        productMap[item.nameProduct] += item.quantity || 0; // Cộng thêm số lượng nếu sản phẩm đã có
+                    } else {
+                        productMap[item.nameProduct] = item.quantity || 0; // Nếu chưa có, khởi tạo số lượng
+                    }
+                }
+            });
 
-        // Chuyển dữ liệu sản phẩm thành mảng
-        const productSales = Object.keys(productMap).map(nameProduct => ({
-            nameProduct,
-            quantity: productMap[nameProduct],  // Sử dụng quantity riêng biệt cho mỗi sản phẩm
-        }));
+            // Chuyển dữ liệu sản phẩm thành mảng
+            const productSalesData = Object.keys(productMap).map(nameProduct => ({
+                nameProduct,
+                quantity: productMap[nameProduct],  // Sử dụng quantity riêng biệt cho mỗi sản phẩm
+            }));
 
-        setProductSales(productSales);  // Cập nhật state với dữ liệu sản phẩm đã tính toán
+            setProductSales(productSalesData);  // Cập nhật state với dữ liệu sản phẩm đã tính toán
+        } catch (error) {
+            console.error('Error processing data:', error);
+            setError('Lỗi xử lý dữ liệu');
+        }
     }, [dataOrder]);
 
 
@@ -112,85 +140,178 @@ function ChartLine() {
         ],
     };
     const lineData = () => {
-        // Tạo một mảng chứa số lượng bán cho mỗi ngày trong tháng
-        const dailySales = Array(31).fill(0);  // Giả sử tháng có 31 ngày
+        try {
+            // Tạo một mảng chứa số lượng bán cho mỗi ngày trong tháng
+            const dailySales = Array(31).fill(0);  // Giả sử tháng có 31 ngày
 
-        // Duyệt qua tất cả các đơn hàng để thống kê số lượng bán theo ngày
-        dataOrder.flat().forEach(order => {
-            const day = new Date(order.purchaseDate).getDate();
-            dailySales[day - 1] += order.quantity; // Cộng số lượng bán cho ngày tương ứng
-        });
+            // Duyệt qua tất cả các đơn hàng để thống kê số lượng bán theo ngày
+            if (dataOrder && dataOrder.length > 0) {
+                dataOrder.flat().forEach(order => {
+                    if (order && order.purchaseDate) {
+                        const day = new Date(order.purchaseDate).getDate();
+                        if (day >= 1 && day <= 31) {
+                            dailySales[day - 1] += order.quantity || 0; // Cộng số lượng bán cho ngày tương ứng
+                        }
+                    }
+                });
+            }
 
-        return {
-            labels: Array.from({ length: 31 }, (_, i) => i + 1), // Tạo label từ 1 đến 31
-            datasets: [
-                {
-                    label: 'Số Lượng Bán Theo Ngày',
-                    data: dailySales,
-                    fill: false,
-                    backgroundColor: 'rgba(75,192,192,0.4)',
-                    borderColor: 'rgba(75,192,192,1)',
-                    tension: 0.4,
-                },
-            ],
-        };
+            return {
+                labels: Array.from({ length: 31 }, (_, i) => i + 1), // Tạo label từ 1 đến 31
+                datasets: [
+                    {
+                        label: 'Số Lượng Bán Theo Ngày',
+                        data: dailySales,
+                        fill: false,
+                        backgroundColor: 'rgba(75,192,192,0.4)',
+                        borderColor: 'rgba(75,192,192,1)',
+                        tension: 0.4,
+                    },
+                ],
+            };
+        } catch (error) {
+            console.error('Error creating line data:', error);
+            return {
+                labels: Array.from({ length: 31 }, (_, i) => i + 1),
+                datasets: [
+                    {
+                        label: 'Số Lượng Bán Theo Ngày',
+                        data: Array(31).fill(0),
+                        fill: false,
+                        backgroundColor: 'rgba(75,192,192,0.4)',
+                        borderColor: 'rgba(75,192,192,1)',
+                        tension: 0.4,
+                    },
+                ],
+            };
+        }
     };
 
-    const options = {
+    const pieOptions = {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top',
+            },
+            title: {
+                display: true,
+                text: 'Doanh Thu Theo Loại Sản Phẩm'
+            }
+        }
+    };
+
+    const barOptions = {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top',
+            },
+            title: {
+                display: true,
+                text: 'Số Lượng Sản Phẩm Bán Ra'
+            }
+        },
         scales: {
             y: {
+                beginAtZero: true,
                 ticks: {
-                    stepSize: 1,  // Đảm bảo trục Y hiển thị số nguyên
-                    beginAtZero: false,  // Không bắt đầu từ 0
-                    min: 10,  // Thiết lập giá trị tối thiểu của trục Y là 10
-                },
+                    stepSize: 1
+                }
+            }
+        }
+    };
+
+    const lineOptions = {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top',
             },
+            title: {
+                display: true,
+                text: 'Số Lượng Bán Theo Ngày'
+            }
         },
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    stepSize: 1
+                }
+            }
+        }
     };
     const exportToExcel = () => {
-        const exportData = dataOrder.flat().map(order => ({
-            'Tên Sản Phẩm': order.nameProduct,
-            'Số Lượng Bán': order.quantity,
-            'Ngày Mua': new Date(order.purchaseDate).toLocaleDateString(),
-            'Size': order.size,
+        try {
+            if (!dataOrder || dataOrder.length === 0) {
+                alert('Không có dữ liệu để xuất');
+                return;
+            }
 
-        }));
+            const exportData = dataOrder.flat().map(order => ({
+                'Tên Sản Phẩm': order.nameProduct || 'N/A',
+                'Số Lượng Bán': order.quantity || 0,
+                'Ngày Mua': order.purchaseDate ? new Date(order.purchaseDate).toLocaleDateString() : 'N/A',
+                'Size': order.size || 'N/A',
+            }));
 
-        const ws = XLSX.utils.json_to_sheet(exportData);
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, 'ChiTietBanHang');
-        XLSX.writeFile(wb, 'ChiTiet_BanHang.xlsx');
+            const ws = XLSX.utils.json_to_sheet(exportData);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'ChiTietBanHang');
+            XLSX.writeFile(wb, 'ChiTiet_BanHang.xlsx');
+        } catch (error) {
+            console.error('Error exporting to Excel:', error);
+            alert('Lỗi khi xuất Excel');
+        }
     };
 
     return (
         <div className="container">
             <h2 className="text-center mb-4">Quản Lý Doanh Thu</h2>
-            <div className="d-flex justify-content-end mb-3">
-                <button className='btn btn-success' onClick={exportToExcel}>Xuất Excel</button>
-            </div>
-
-            <div className="row">
-                <div className="col-md-6 mb-4">
-                    <div className="card p-3 shadow-sm">
-                        <h5 className="text-center">Biểu Đồ Pie - Doanh Thu</h5>
-                        <Pie data={pieData} options={options} />
+            
+            {loading && (
+                <div className="text-center">
+                    <div className="spinner-border" role="status">
+                        <span className="visually-hidden">Loading...</span>
                     </div>
                 </div>
-                <div className="col-md-6 mb-4">
-                    <div className="card p-3 shadow-sm">
-                        <h5 className="text-center">Biểu Đồ Bar - Số Lượng Sản Phẩm</h5>
-                        <Bar data={barData} options={options} />
-                    </div>
+            )}
+            
+            {error && (
+                <div className="alert alert-danger" role="alert">
+                    {error}
                 </div>
-
-                <div className="col-12 mb-4">
-                    <div className="card p-3 shadow-sm">
-                        <h5 className="text-center">Biểu Đồ Line - Số Lượng Bán Theo Ngày</h5>
-                        <Line data={lineData()} options={options} />
+            )}
+            
+            {!loading && !error && (
+                <>
+                    <div className="d-flex justify-content-end mb-3">
+                        <button className='btn btn-success' onClick={exportToExcel}>Xuất Excel</button>
                     </div>
-                </div>
 
-            </div>
+                    <div className="row">
+                        <div className="col-md-6 mb-4">
+                            <div className="card p-3 shadow-sm">
+                                <h5 className="text-center">Biểu Đồ Pie - Doanh Thu</h5>
+                                <Pie data={pieData} options={pieOptions} />
+                            </div>
+                        </div>
+                        <div className="col-md-6 mb-4">
+                            <div className="card p-3 shadow-sm">
+                                <h5 className="text-center">Biểu Đồ Bar - Số Lượng Sản Phẩm</h5>
+                                <Bar data={barData} options={barOptions} />
+                            </div>
+                        </div>
+
+                        <div className="col-12 mb-4">
+                            <div className="card p-3 shadow-sm">
+                                <h5 className="text-center">Biểu Đồ Line - Số Lượng Bán Theo Ngày</h5>
+                                <Line data={lineData()} options={lineOptions} />
+                            </div>
+                        </div>
+                    </div>
+                </>
+            )}
         </div>
     );
 }

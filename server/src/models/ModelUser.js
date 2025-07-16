@@ -10,4 +10,4 @@ const ModelUser = new Schema({
     phone: { type: Number, default: 0 },
 });
 
-module.exports = mongoose.model('user', ModelUser);
+module.exports = mongoose.model('users', ModelUser);

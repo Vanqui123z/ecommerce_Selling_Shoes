@@ -27,6 +27,8 @@ const io = new Server(server, {
 // Serve static files from React
 app.use(express.static(path.join(__dirname, '../../client/build')));
 
+// Serve static files from uploads folder
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use(cookieParser());
 app.use(cors({ origin: process.env.REACT_APP_URL, credentials: true }));

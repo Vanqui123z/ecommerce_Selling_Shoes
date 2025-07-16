@@ -57,7 +57,7 @@ function ModalDetailProduct({ id, show, setShow }) {
             <ToastContainer />
             <Modal show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered onHide={handleClose}>
                 {dataProduct.map((item) => (
-                    <Modal.Body key={item.id} className={cx('modal-body')}>
+                    <Modal.Body key={item._id} className={cx('modal-body')}>
                         <div className={cx('img')}>
                             <img src={`${process.env.REACT_APP_IMG}/${item.img[0]}`} alt="" />
                         </div>

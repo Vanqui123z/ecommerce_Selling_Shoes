@@ -18,7 +18,6 @@ const modelCart = new Schema({
     name: { type: String, default: '' },
     phone: { type: Number, default: 0 },
     sumprice: { type: Number, default: 0 },
-    phone: { type: Number, default: 0 },
 });
 
-module.exports = mongoose.model('cart', modelCart);
+module.exports = mongoose.model('carts', modelCart);

@@ -17,6 +17,7 @@ function App() {
 
     useEffect(() => {
         request.get('/api/products').then((res) => {
+            console.log(res.data);
             setDataProducts(res.data);
         });
     }, []);

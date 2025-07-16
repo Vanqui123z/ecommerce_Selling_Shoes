@@ -64,7 +64,7 @@ function DetailProducts() {
 
     useEffect(() => {
         dataProduct.map((item) =>
-            item.type === 1 ? setCheckType(1) : item.type === 2 ? setCheckType(2) : setCheckType(3),
+            item.type === 1 ? setCheckType(1) : item.type === 3 ? setCheckType(2) : item.type === 4 ? setCheckType(3) : setCheckType(1),
         );
     }, [dataProduct]);
 
@@ -166,7 +166,7 @@ function DetailProducts() {
             <main className={cx('main')}>
                 <Navbar props={dataProduct} />
                 {dataProduct.map((item) => (
-                    <div key={item.id} className={cx('form-product')}>
+                    <div key={item._id} className={cx('form-product')}>
                         <div className={cx('img-product')}>
                             <div className={cx('img-small')}>
                                 {item.img.map((item2, index) => (

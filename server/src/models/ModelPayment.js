@@ -25,4 +25,4 @@ const modelPayment = new Schema({
     username: { type: String },
 });
 
-module.exports = mongoose.model('payment', modelPayment);
+module.exports = mongoose.model('payments', modelPayment);

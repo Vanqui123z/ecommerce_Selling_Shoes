@@ -25,7 +25,15 @@ function ManageProducts({ setCheckOpenAddProduct }) {
     
     // Filter products based on type and search term
     const filteredProducts = dataProduct.filter(product => {
-        const matchesType = selectedType === '0' ? true : product.type === parseInt(selectedType);
+        let matchesType = true;
+        if (selectedType !== '0') {
+            const typeMap = {
+                '1': 1, // Giày Nam
+                '2': 3, // Giày Nữ  
+                '3': 4  // Giày Trẻ Em
+            };
+            matchesType = product.type === typeMap[selectedType];
+        }
         const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
         return matchesType && matchesSearch;
     });
@@ -128,7 +136,7 @@ function ManageProducts({ setCheckOpenAddProduct }) {
                                     </td>
                                     <td>{item.name}</td>
                                     <td>
-                                        {item.type === 1 ? 'Giày Nam' : item.type === 2 ? 'Giày Nữ' : 'Giày Trẻ Em'}
+                                        {item.type === 1 ? 'Giày Nam' : item.type === 3 ? 'Giày Nữ' : item.type === 4 ? 'Giày Trẻ Em' : 'Không xác định'}
                                     </td>
                                     <td>{item.price.toLocaleString()} đ</td>
                                     <td>
